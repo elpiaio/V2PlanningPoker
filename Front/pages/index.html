@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/planning-poker-lobby.css">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!--login-->
+    <div class="section-login" id="section-login">
+        <div class="container">
+            <H1>Login</H1>
+            <input type="text" id="LoginNome" placeholder="Nome">
+            <br><br>
+            <button id="buttonSend-login">Enviar</button>
+            <br><br>
+        </div>
+    </div>
+
+
+    <!--section do lobby-->
+    <div class="div-lobby" id="div-lobby">
+        <!--planning poker lobby-->
+        <div class="planning-poker-lobby">
+            <!--botoes(cards)-->
+            <div class="planning-poker-lobby-buttons">
+                <button type="button" onclick="" class="btn-lobby-1"><strong>1</strong></button>
+                <button type="button" onclick="" class="btn-lobby-2"><strong>2</strong></button>
+                <button type="button" onclick="" class="btn-lobby-3"><strong>3</strong></button>
+                <button type="button" onclick="" class="btn-lobby-5"><strong>5</strong></button>
+                <button type="button" onclick="" class="btn-lobby-8"><strong>8</strong></button>
+                <button type="button" onclick="" class="btn-lobby-13"><strong>13</strong></button>
+                <button type="button" onclick="" class="btn-lobby-cafe"><strong>Café</strong></button>
+            </div>
+
+            <div class="planning-poker-lobby-sidebar">
+                <h1>Players</h1>
+                <br>
+                <div class="div-players" id="div-players">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        //lobby elements
+        var containerPlayer = document.querySelector("#div-players");
+        var div_lobby = document.querySelector("#div-lobby");
+    
+        //botao do login
+        var botaoLogin = document.querySelector("#buttonSend-login");
+        var minhaSection = document.querySelector("#section-login");
+        var input_login = document.querySelector("#LoginNome");
+    
+    
+        const currentDate = new Date();
+        const user = { id: "", name: "", votou: false }
+    
+        const socket = new WebSocket('ws://localhost:3000');
+    
+        socket.addEventListener('open', (event) => {
+            console.log('Conectado ao servidor WebSocket');
+            // Enviar informações do usuário para o servidor
+    
+            if (user.name != "") {
+                socket.send(JSON.stringify(user));
+            }
+        });
+    
+        botaoLogin.addEventListener("click", function () { // Adiciona um ouvinte de evento de clique ao botão de login
+    
+            if (input_login.value != "") {
+    
+                user.name = input_login.value
+                user.id = currentDate.getMilliseconds();
+    
+                socket.send(JSON.stringify(user));  // Agora, o evento open será acionado antes dessa linha
+    
+                minhaSection.style.display = "none"
+                div_lobby.style.display = "flex"
+    
+            }
+            else {
+                alert("preencha o campo")
+            }
+        });
+    
+    
+        socket.addEventListener('message', (event) => {
+            const userList = JSON.parse(event.data);
+            console.log('tamanho:', userList.length, 'Lista de usuários conectados:', userList);
+    
+            // Atualize a interface do usuário com a lista de usuários
+            // Exemplo: renderizar a lista em uma div ou outra parte da página
+            // ...
+            containerPlayer.innerHTML = ``;
+            userList.forEach(x => {
+                containerPlayer.innerHTML += `
+                    <p class="user-lobby-ativo">${x.name} ${x.votou}</p>
+                    <br>
+                `;
+            })
+    
+    
+            // Aqui você pode notificar o usuário sobre a entrada ou saída de outros usuários
+            // Exemplo: mostrar uma notificação
+            // ...
+        });
+    
+        socket.addEventListener('close', (event) => {
+            console.log('Conexão fechada');
+        });
+    </script>
+    
+</body>
+
+</html>

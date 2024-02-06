@@ -1,0 +1,87 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.planning-poker-lobby{
+    display: flex;
+    max-width: 1920px;
+    padding: 40px;
+    height: 100%;
+    padding-bottom: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.planning-poker-lobby-buttons{
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    
+}
+
+
+.planning-poker-lobby-buttons button {
+    cursor: pointer;
+    border: 1px solid rgba(244, 244, 244);
+    background-color: rgba(100, 167, 255, 0.6);
+    width: 400px;
+    border-radius: 15px;
+    object-fit: cover;
+    width: 100%;
+
+}
+
+.planning-poker-lobby-buttons button{
+    color: azure;
+    font-size: 50px;
+}
+
+.planning-poker-lobby-buttons button:hover{
+    color: azure;
+    background-color: rgba(1, 45, 102, 0.6);
+    font-size: 50px;
+}
+
+
+body{
+    background-image: url("../images/image2.jpg");
+    height: 100vh;
+}
+
+/*DIV*/
+
+
+.div-lobby{
+    display: none;
+    justify-content: center;
+    height: 100%;
+}
+
+
+
+/*BARRA LATERAL*/
+
+.planning-poker-lobby-sidebar{
+    display: fixed;
+    padding: 20px;
+    background: rgb(3, 20, 70);
+    width: 600px;
+    margin-left: 50px;
+    border-radius: 5px;
+    color: azure;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    
+}
+
+.planning-poker-lobby-sidebar h1{
+    text-align: center;
+    width: 100%;
+}
+
+.planning-poker-lobby-sidebar p{
+    text-align: center;
+    width: 100%;
+}
