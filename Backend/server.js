@@ -17,11 +17,23 @@ wss.on('connection', (ws) => {
       const userObject = JSON.parse(message);
 
       // Adiciona o usuário à lista de usuários conectados
-      connectedUsers.set(ws, {
-        name: userObject.name,
-        id: userObject.id,
-        votou: userObject.votou
-      });
+      if (userObject.idxuser != null) {
+        connectedUsers.set(ws, {
+          name: userObject.name,
+          id: userObject.id,
+          votou: true,
+          idxuser: userObject.idxuser,
+          isAdmin: userObject.isAdmin
+        });
+      } else {
+        connectedUsers.set(ws, {
+          name: userObject.name,
+          id: userObject.id,
+          votou: userObject.votou,
+          idxuser: userObject.idxuser,
+          isAdmin: userObject.isAdmin
+        });
+      }
 
       // Notifica todos os usuários sobre o novo usuário
       broadcastUserList();

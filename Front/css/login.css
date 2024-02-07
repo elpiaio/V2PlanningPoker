@@ -7,7 +7,7 @@
 
 .container{
     text-align: center;
-    background-color: rgba(1, 48, 100, 0.8);
+    background-color: rgba(58, 69, 40, 0.8);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -37,7 +37,8 @@ button:hover{
 
 .container h1{
     font-size: 40px;
-    color: azure;
+    color: rgb(0, 0, 0);
+    height: 60px;
 }
 
 .fadeout{
