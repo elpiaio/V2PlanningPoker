@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -51,7 +53,7 @@ body{
     height: 100vh;
 }
 
-/*DIV*/
+/*DIV PAI*/
 
 
 .div-lobby{
@@ -74,7 +76,7 @@ body{
     border-radius: 5px;
     color: azure;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    align-items: center;    
+    align-items: center;
 }
 
 .planning-poker-lobby-sidebar h1{
@@ -92,6 +94,97 @@ body{
 }
 
 .planning-poker-lobby-sidebar img{
-    width: 190px;
+    width: 100px;
 
+}
+
+.planning-poker-lobby-sidebar-user-configurations{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    bottom: 100px;
+    position: fixed;
+
+}
+
+#planning-poker-lobby-sidebar-adminButton{
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 30px;
+    gap: 8px;
+}
+
+#cardEncerrar,#eyeIcon, #refrechIcon{
+    border: 1px solid rgb(37, 39, 37);
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    
+}
+
+
+#cardEncerrar:hover, #eyeIcon:hover, #refrechIcon:hover{
+    background-color: rgba(41, 42, 41, 0.5);
+}
+
+
+/*DIV DADOS DA VOTAÇÃO*/
+
+.lobby_votacao{
+    flex-direction: column;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 600px;
+    width: 1020px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 15px;
+    display: none;
+    color: azure;
+    font-family: Arial, Helvetica, sans-serif;
+   align-items: center;
+
+
+}
+.lobby_votacao img{
+    margin-top: 50px;
+    width: 200px;
+    height: 30px;
+    
+}
+
+.lobby_votacao h1{
+    width: 100%;
+    text-align: center;
+}
+
+.h1ResultsIntro{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 44px;
+}
+
+.h1Results{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 150px;
+}
+
+.lobby_votacao button{
+    display: flex;
+    border: 1px solid rgb(37, 39, 37);
+    background-color: rgba(166, 0, 0, 0.5);
+    cursor: pointer;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 29px;
+}
+
+.btnCloseResults:hover{
+    background-color: rgba(29, 15, 15, 0.5);
+    font-size: 29px;
 }
