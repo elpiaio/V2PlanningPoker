@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -25,8 +27,8 @@
 
 .planning-poker-lobby-buttons button {
     cursor: pointer;
-    border: 1px solid rgba(244, 244, 244);
-    background-color: rgba(100, 167, 255, 0.6);
+    border: 1px solid rgb(20, 43, 19);
+    background-color: rgba(58, 69, 40, 0.5);
     width: 400px;
     border-radius: 15px;
     object-fit: cover;
@@ -41,7 +43,7 @@
 
 .planning-poker-lobby-buttons button:hover{
     color: azure;
-    background-color: rgba(1, 45, 102, 0.6);
+    background-color: rgba(26, 31, 18, 0.8);
     font-size: 50px;
 }
 
@@ -51,7 +53,7 @@ body{
     height: 100vh;
 }
 
-/*DIV*/
+/*DIV PAI*/
 
 
 .div-lobby{
@@ -65,23 +67,124 @@ body{
 /*BARRA LATERAL*/
 
 .planning-poker-lobby-sidebar{
-    display: fixed;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
-    background: rgb(3, 20, 70);
+    background: rgba(58, 69, 40, 0.6);
     width: 600px;
     margin-left: 50px;
     border-radius: 5px;
     color: azure;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    
+    align-items: center;
 }
 
 .planning-poker-lobby-sidebar h1{
     text-align: center;
     width: 100%;
+    font-size: 40px;
 }
 
 .planning-poker-lobby-sidebar p{
     text-align: center;
     width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: rgb(163, 163, 163);
+}
+
+.planning-poker-lobby-sidebar img{
+    width: 100px;
+
+}
+
+.planning-poker-lobby-sidebar-user-configurations{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    bottom: 100px;
+    position: fixed;
+
+}
+
+#planning-poker-lobby-sidebar-adminButton{
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 30px;
+    gap: 8px;
+}
+
+#cardEncerrar,#eyeIcon, #refrechIcon{
+    border: 1px solid rgb(37, 39, 37);
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    
+}
+
+
+#cardEncerrar:hover, #eyeIcon:hover, #refrechIcon:hover{
+    background-color: rgba(41, 42, 41, 0.5);
+}
+
+
+/*DIV DADOS DA VOTAÇÃO*/
+
+.lobby_votacao{
+    flex-direction: column;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 600px;
+    width: 1020px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 15px;
+    display: none;
+    color: azure;
+    font-family: Arial, Helvetica, sans-serif;
+   align-items: center;
+
+
+}
+.lobby_votacao img{
+    margin-top: 50px;
+    width: 200px;
+    height: 30px;
+    
+}
+
+.lobby_votacao h1{
+    width: 100%;
+    text-align: center;
+}
+
+.h1ResultsIntro{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 44px;
+}
+
+.h1Results{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 150px;
+}
+
+.lobby_votacao button{
+    display: flex;
+    border: 1px solid rgb(37, 39, 37);
+    background-color: rgba(166, 0, 0, 0.5);
+    cursor: pointer;
+    border-radius: 15px;
+    width: 60px;
+    height: 60px;
+    font-size: 29px;
+}
+
+.btnCloseResults:hover{
+    background-color: rgba(29, 15, 15, 0.5);
+    font-size: 29px;
 }
