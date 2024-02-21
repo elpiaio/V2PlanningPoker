@@ -1,3 +1,4 @@
+var containerStories = document.querySelector(".sidebar-stories-geral")
 
 //lobby elements
 var containerPlayer = document.querySelector("#div-players");
@@ -8,13 +9,14 @@ var div_lobby_results = document.querySelector(".lobby_votacao");
 var botaoLogin = document.querySelector("#buttonSend-login");
 var minhaSection = document.querySelector("#section-login");
 var input_login = document.querySelector("#LoginNome");
-var input_senha_login = document.querySelector("#loginSenha");
+var input_Id_login = document.querySelector("#loginSenha");
 
 //elemento do icon
 var eyeIcon = document.getElementById('eyeIcon');
 
 //elementos do user-informations da sidebar
 var h2UserInformation = document.getElementById("sidebar-user-informations-user-name");
+let inviteToken = document.querySelector('.invite-token h2');
 
 //botão contabilizarVotos
 var containerBotao = document.getElementById("planning-poker-lobby-sidebar-adminButton");
@@ -23,9 +25,10 @@ var containerBotao = document.getElementById("planning-poker-lobby-sidebar-admin
 var containerResults = document.getElementById("lobby_votacao");
 
 const currentDate = new Date();
-const user = { id: "", name: "", votou: false, idxuser: null, isAdmin: false, refreshAdm: false, exibir: false, contador: false }
+const user = { sectionId: "", sectionName: "", id: "", name: "", votou: false, idxuser: null, isAdmin: false, refreshAdm: false, exibir: false, }
 
 let userList = [];
+let sectionsList = [];
 
 var soma = 0;
 let exibirVoto
@@ -35,6 +38,11 @@ let votouUsuario = false
 let adm = false
 var media = 0
 var abrirContabilizador = false
+var idSecao = null;
+var createSection = false;
+var validouEntrada = false;
+var nameSectionValidation;
+
 
 const socket = new WebSocket('ws://localhost:3000');
 
@@ -47,35 +55,43 @@ socket.addEventListener('open', (event) => {    // Evento 'open' do WebSocker e 
     }
 });
 
-botaoLogin.addEventListener("click", function () { // Adiciona um ouvinte de evento de clique ao botão de login
-
-    if (input_login.value != "") {
+function sendLogin() { // Adiciona um ouvinte de evento de clique ao botão de login
+    if (input_login.value != "" || input_Id_login.value != "") {
         //para o server
         user.name = input_login.value
-        user.id = currentDate.getMilliseconds();
+        user.id = generateId();
+
+        function generateId() {
+            return 'user' + Math.random().toString(36).substr(2, 9);
+        }
 
         //para manipulação no index
         idUsuario = user.id
         nameUsuario = user.name
+        idSecao = input_Id_login.value
         h2UserInformation.innerText = nameUsuario;
 
-        if (input_senha_login.value != "") {
-            user.isAdmin = true
-        }
-
-        socket.send(JSON.stringify(user));  // Agora, o evento open será acionado antes dessa linha
-
-        minhaSection.style.display = "none"
-        div_lobby.style.display = "flex"
-
+        user.sectionId = idSecao;
+        socket.send(JSON.stringify(user));
     }
     else {
         alert("preencha o campo")
     }
-});
+};
+
+function validandoEntradaUsuario() {
+    userList.forEach(x => {
+        if (x.sectionId === input_Id_login.value) {
+            nameSectionValidation = x.sectionName;
+        }
+    });
+
+    minhaSection.style.display = "none"
+    div_lobby.style.display = "flex"
+}
 
 function montandoContabilizador() {  // resultado da votação votação
-    if(userList.contador == true){
+    if (userList.contador == true) {
         div_lobby_results.style.display = "flex";
         containerResults.innerHTML = ``;
         containerResults.innerHTML += `
@@ -107,19 +123,23 @@ function montarUsersOnline(userList) {// Função para montar aa lista de usuár
             </p>
             <br>
         `;
+        inviteToken.innerText = x.sectionId
     })
 }
 
 function adminConfigurations() { //algumas configurações e funcionalidades do Admin
-
-    if (input_senha_login.value != "") { //validação para descobrir o admin(primeiro usuario)
-        adm = true
-        containerBotao.innerHTML = ``;
-        containerBotao.innerHTML = `<button type="button" title="Contabilizar Votos" id="cardEncerrar" onclick="contabilizandoVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-arrow-square-out"></i></strong></button>
+    adm = true
+    containerBotao.innerHTML = ``;
+    containerBotao.innerHTML = `<button type="button" title="Contabilizar Votos" id="cardEncerrar" onclick="contabilizandoVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-arrow-square-out"></i></strong></button>
                                     <button type="button" title="Exibir votos" id="eyeIcon" onclick="exibirVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-eye-slash"></i></strong></button>
                                     <button type="button" title="Nova Votação" id="refrechIcon" onclick="zerarVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-arrows-counter-clockwise"></i></strong></button>
                                 `;
-    }
+    var containerGay = document.querySelector(".boiolon");
+    containerGay.innerHTML = '';
+    containerGay.innerHTML += `
+     <button type="button" onclick="createStories()"
+     class="btn-lobby-addStories"><strong><i class="ph ph-plus"><br><h3>Add Stories</h3></i></strong></button>
+`;
 }
 
 
@@ -127,7 +147,25 @@ socket.addEventListener('message', (event) => { //retorna a lista de usuarios do
     userList = JSON.parse(event.data);
     console.log('tamanho:', userList.length, 'Lista de usuários conectados:', userList);
 
-    adminConfigurations(userList)
+    sectionsList = userList.filter((section) => {
+        return section.isAdmin;
+    }).map((section) => {
+        return { sectionId: section.sectionId, sectionName: section.sectionName, nameUsuario: section.nameUsuario };
+    });
+
+    if (validouEntrada == false && createSection == false) {
+        if (sectionsList.some((section) => section.sectionId == input_Id_login.value)) {
+            validandoEntradaUsuario()
+        } else {
+            window.alert("id de sessão não encontrado")
+            window.location.reload();
+        }
+        validouEntrada=true;
+    }
+
+    if (createSection == true) {
+        adminConfigurations(userList);
+    }
 
     // Atualize a interface do usuário com a lista de usuários
     // Exemplo: renderizar a lista em uma div ou outra parte da página
@@ -173,9 +211,9 @@ function contabilizandoVotos() { //abre a tabela de resultados
     })
     media = soma / i;
     media = media.toFixed(1);
-    
+
     abrirContabilizador = true
-    
+
     const usuariosAtualizados = userList.map(usuario => {
         if (usuario.isAdmin) {
             return { ...usuario, contador: true };
@@ -215,7 +253,6 @@ function zerarVotos() { //admin tem a opção de fazer uma nova votação
 }
 
 function exibirVotos() { //admin tem a opção de exibir os votos ou nao
-
     let usuariosAtualizados
     if (exibirVoto == false) {
         usuariosAtualizados = userList.map(usuario => {
@@ -247,3 +284,62 @@ function exibirVotos() { //admin tem a opção de exibir os votos ou nao
 socket.addEventListener('close', (event) => { // Evento 'close' do WebSocket:
     console.log('Conexão fechada');
 });
+
+
+
+////////////////////////////////////////////////////////////////////////
+/////////////FUNÇOES DA TELA INICIAL
+////////////////////////////////////////////////////////////////////////
+var createRoomForm = document.querySelector(".div-create-room")
+
+var adminName = document.querySelector(".userName")
+var roomName = document.querySelector(".roomName")
+
+var bct = document.querySelector(".div-geral")
+
+function joinRoom() {
+    bct.style.display = "none"
+    minhaSection.style.display = "flex"
+}
+
+function closePanelCreateRoom() {
+    createRoomForm.style.display = "none";
+}
+function panelCreateRoom() {
+    createRoomForm.style.display = "flex";
+}
+
+
+function createRoom() {
+    if (adminName.value != "" || roomName.value != "") {
+        //para o server
+        user.name = adminName.value;
+        user.id = currentDate.getMilliseconds();
+        user.sectionName = roomName.value;
+        user.isAdmin = true;
+        user.sectionId = generateIdRoom();
+
+        function generateIdRoom() {
+            return 'room' + Math.random().toString(36).substr(2, 9);
+        }
+        console.log(user.sectionId);
+
+        idUsuario = user.id
+        nameUsuario = user.name
+        createSection = true
+
+        createRoomForm.style.display = "none";
+        bct.style.display = "none"
+        div_lobby.style.display = "flex"
+        socket.send(JSON.stringify(user));
+    }
+    else {
+        alert("preencha o campo")
+    }
+}
+
+//////////////
+function createStories(){
+    var panelCreateStories = document.querySelector(".panel-add-stories");
+    
+}
