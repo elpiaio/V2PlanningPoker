@@ -4,30 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="../css/login.css">
     <link rel="stylesheet" href="../css/planning-poker-lobby.css">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="../css/landingPage.css">
+    <title>TunAd | PlanningPoker</title>
 </head>
 
 <body>
 
-    <!--login-->
+    <!--LANDING PAGE-->
+    <div class="div-geral" id="div-geral">
+        <div class="logo-tunad">
+            <h2><img src="../images/header_logo.png" alt=""></h2>
+        </div>
+        <div class="div-buttons">
+            <button class="btn-create-room" onclick="panelCreateRoom()">Nova Sala</button>
+            <button class="btn-join-room" onclick="joinRoom()">Entrar na Sala</button>
+        </div>
+    </div>
+
+    <!--criação de sala-->
+    <div class="div-create-room">
+        <div class="divbntX">
+            <button class="bntX" onclick="closePanelCreateRoom()"><i class="ph ph-x-circle"></i></button>
+        </div>
+        <div class="container-options">
+            <h3>Digite seu Nome</h3>
+            <input type="text" class="userName" placeholder="Nome de Usuario">
+            <h3>Digite o Nome da Sala</h3>
+            <input type="text" class="roomName" placeholder="Nome da Sala">
+            <button class="btnCloseCreate" onclick="handleCreateRoom()"><i class="ph ph-arrow-square-up"></i></button>
+        </div>
+    </div>
+    <!--LOGIN-->
     <div class="section-login" id="section-login">
         <div class="container">
             <H1>
                 <img src="../images/header_logo.png" alt="">
             </H1>
             <input type="text" id="LoginNome" placeholder="Nome">
-            <input type="text" id="loginSenha" placeholder="senha de admin">
+            <input type="text" id="loginSenha" placeholder="Id da sessão">
             <br><br>
-            <button id="buttonSend-login">Enviar</button>
+            <button id="buttonSend-login" onclick="sendLogin()">Enviar</button>
             <br><br>
         </div>
     </div>
 
-
-    <!--section do lobby-->
+    <!--LOBBY-->
     <div class="div-lobby" id="div-lobby">
         <!--planning poker lobby-->
         <div class="planning-poker-lobby">
@@ -42,7 +66,7 @@
 
 
                 <!--SOMENTE BOTOES-->
-                <button type="button" idx="1" id="card1"  onclick="magianegra(this)"
+                <button type="button" idx="1" id="card1" onclick="magianegra(this)"
                     class="btn-lobby-1"><strong>1</strong></button>
                 <button type="button" idx="2" id="card2" onclick="magianegra(this)"
                     class="btn-lobby-2"><strong>2</strong></button>
@@ -56,30 +80,81 @@
                     class="btn-lobby-13"><strong>13</strong></button>
                 <button type="button" idx="cafe" id="cardCafe" onclick="magianegra(this)"
                     class="btn-lobby-cafe"><strong><i class="ph ph-coffee"></i></strong></button>
+                
                 <!--FIM DOS BOTOES-->
+                
             </div>
-           
-
             <div class="planning-poker-lobby-sidebar">
                 <img src="../images/header_logo.png" alt="">
                 <br>
                 <div class="div-players" id="div-players"></div>
 
                 <div class="planning-poker-lobby-sidebar-user-configurations">
-
                     <H2 class="sidebar-user-informations-user-name" id="sidebar-user-informations-user-name"></H2>
+                </div>
+
+                <div id="planning-poker-lobby-sidebar-adminButton">
 
                 </div>
-                <div id="planning-poker-lobby-sidebar-adminButton">
+
+                <!-- <div class="stories-user-information">
+                    <div>
+                        <div class="divisor-stories"></div>
+                        <div class="boiolon">
+                            <button type="button" onclick="createStories()" class="btn-lobby-addStories">
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="open-panel-add-stories" style="display: contents;">
+                </div>
+                <div class="invite-token">
+                    <h2>token not found</h2><i onclick="copyId(this)" class="ph ph-copy"></i>
+                </div>
+            </div>
+        </div>
+        <div class="panel-add-stories">
+            <div class="insert-stories">
+                <h3>Add stories</h3>
+                <input type="text" placeholder="Nome" class="input-insert-stories">
+                <div class="btn-add-stories">
+                    <button onclick="insertStories()">Send</button>
+                    <button onclick="closePanelAddStories()">Close</button>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="view-stories">
+                <div class="content-views-stories">
 
                 </div>
             </div>
         </div>
     </div>
     <script src="../scripts/index.js"></script>
-
     <script>
+        function copyId(element) {
+            let text = document.querySelector('.invite-token h2').innerText;
+            let input = document.createElement('input');
+            input.setAttribute('value', text);
+            document.body.appendChild(input);
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(input);
 
+            // Altera o ícone para ph-check temporariamente
+            element.classList.remove('ph-copy');
+            element.classList.add('ph-check');
+
+            // Reverte para ph-copy após 1 segundo
+            setTimeout(function () {
+                element.classList.remove('ph-check');
+                element.classList.add('ph-copy');
+            }, 500);
+        }
+
+        
     </script>
 </body>
 

@@ -33,10 +33,6 @@
     border-radius: 15px;
     object-fit: cover;
     width: 100%;
-
-}
-
-.planning-poker-lobby-buttons button{
     color: azure;
     font-size: 50px;
 }
@@ -47,11 +43,11 @@
     font-size: 50px;
 }
 
-
-body{
-    background-image: url("../images/image2.jpg");
-    height: 100vh;
+.planning-poker-lobby-buttons h3{
+    font-family: 'Exo 2', sans-serif;
+    font-size: 30px;
 }
+
 
 /*DIV PAI*/
 
@@ -123,7 +119,6 @@ body{
     width: 60px;
     height: 60px;
     font-size: 20px;
-    
 }
 
 
@@ -131,6 +126,119 @@ body{
     background-color: rgba(41, 42, 41, 0.5);
 }
 
+.btn-lobby-addStories {
+    height: 100%;
+    font-size: 25px;
+    color: #000;
+    background-color: transparent;
+    top: 84%;
+}
+
+.boiolon{
+    position: absolute;
+    top: 74%;
+}
+
+.divisor-stories{
+    background-color: #000;
+    height: 2px;
+    border-radius: 30px;
+    position: absolute;
+    top: 80%;
+    width: 325px;
+}
+
+
+body{
+    background-image: url("../images/image2.jpg");
+    height: 100vh;
+}
+
+.invite-token{
+    position: absolute;
+    top: 82%;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.invite-token i{
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+/*painel de adicionar stories*/
+.panel-add-stories{
+    color: azure;
+    text-align: center;
+    background-color: rgba(58, 69, 40, 0.8);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 79px;
+    border-radius: 8%;
+    width: 650px;
+    display: flex;
+    font-family: 'Exo 2', sans-serif;
+    gap: 20px;
+}
+
+
+.insert-stories{
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+}
+.view-stories{
+    display: flex;
+    gap: 5px;
+    font-size: 15px;
+    flex-direction: column;
+    max-height: 250px;
+    overflow: auto;
+    width: 225px;
+
+}
+.view-stories i{
+    align-items: center;
+    font-size: 20px ;    
+    cursor: pointer;
+    max-width: 2px;
+}
+
+.btn-add-stories{
+    display: flex;
+    gap: 8px
+}
+
+.divider {
+    height: 176px;
+    width: 7px;
+    border-radius: 30px;
+    background: #000;
+}
+::-webkit-scrollbar {
+    width: 10px; /* largura da barra de rolagem */
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* cor do fundo da barra de rolagem */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* cor do "thumb" (a parte arrastável) */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* cor do "thumb" quando passa o mouse por cima */
+    
+}
+
+/**/
 
 /*DIV DADOS DA VOTAÇÃO*/
 

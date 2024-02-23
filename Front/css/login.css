@@ -3,7 +3,9 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+.section-login{
+    display: none;
+}
 
 .container{
     text-align: center;

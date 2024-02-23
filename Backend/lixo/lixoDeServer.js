@@ -53,7 +53,7 @@ wss.on('connection', (ws) => {
       exibindoVotos() //exibe os votos
 
       //montando o arquivo JSON
-      //montandoRoom()
+      montandoRoom()
 
       // Notifica todos os usuários sobre o novo usuário
       broadcastUserList();
@@ -74,7 +74,7 @@ wss.on('connection', (ws) => {
 
 function broadcastUserList() {
   //Converte a lista de usuários para um array de objetos
-  userList = {}
+  let userList = {}
   userList = Array.from(connectedUsers.values()).map((user) => {
     return user;
   });
@@ -144,49 +144,4 @@ function exibindoVotos(){
       });
     });
   }
-}
-
-
-
-
-//JSON 
-let timestamp = Date.now();
-let data = new Date(timestamp);
-let formattedDate = data.toLocaleString();
-
-function montandoRoom(){
-  const room = {
-    "Room": {
-      "Name": connectedUsers.sectionName,
-      "Id": connectedUsers.sectionId,
-      "CreatedAt": formattedDate,
-      "stories": [
-        {
-          "Title": "string",
-          "Id": "guid",
-          "Order": "int",
-          "Voted": "bool",
-          "Time": "timespan",
-          "CreatedAt": "DateTime",
-          "AvgPoints": "decimal",
-          "TotalPoints": "decimal",
-          "VotedHistories": [
-            {
-              "User": "guid",
-              "Voted": "bool",
-              "Vote": "decimal",
-              "Time": "timespan"
-            }
-          ]
-        }
-      ],
-      "users": [
-        {
-          "Id": connectedUsers.id,
-          "Name": connectedUsers.name,
-          "IsAdmin": connectedUsers.isAdmin
-        }
-      ]
-    }
-  };
 }
