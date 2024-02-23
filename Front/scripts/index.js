@@ -1,4 +1,5 @@
 var containerStories = document.querySelector(".sidebar-stories-geral")
+var panelCreateStories = document.querySelector(".panel-add-stories");
 
 //lobby elements
 var containerPlayer = document.querySelector("#div-players");
@@ -18,17 +19,35 @@ var eyeIcon = document.getElementById('eyeIcon');
 var h2UserInformation = document.getElementById("sidebar-user-informations-user-name");
 let inviteToken = document.querySelector('.invite-token h2');
 
-//botão contabilizarVotos
+//
 var containerBotao = document.getElementById("planning-poker-lobby-sidebar-adminButton");
 
 //container dos resultados
 var containerResults = document.getElementById("lobby_votacao");
 
 const currentDate = new Date();
-const user = { sectionId: "", sectionName: "", id: "", name: "", votou: false, idxuser: null, isAdmin: false, refreshAdm: false, exibir: false, }
-
 let userList = [];
 let sectionsList = [];
+
+const user = {
+    sectionId: "",
+    sectionName: "",
+    id: "",
+    name: "",
+    isAdmin: false,
+    sectionId: "",
+    votou: false,
+    idxuser: null,
+    refreshAdm: false,
+    exibir: false,
+}
+
+let room = {
+    sectionName: "",
+    sectionId: "",
+    CreatedAt: "",
+    stories: []
+}
 
 var soma = 0;
 let exibirVoto
@@ -42,7 +61,6 @@ var idSecao = null;
 var createSection = false;
 var validouEntrada = false;
 var nameSectionValidation;
-
 
 const socket = new WebSocket('ws://localhost:3000');
 
@@ -59,11 +77,7 @@ function sendLogin() { // Adiciona um ouvinte de evento de clique ao botão de l
     if (input_login.value != "" || input_Id_login.value != "") {
         //para o server
         user.name = input_login.value
-        user.id = generateId();
-
-        function generateId() {
-            return 'user' + Math.random().toString(36).substr(2, 9);
-        }
+        user.id = generateId("user");
 
         //para manipulação no index
         idUsuario = user.id
@@ -128,20 +142,21 @@ function montarUsersOnline(userList) {// Função para montar aa lista de usuár
 }
 
 function adminConfigurations() { //algumas configurações e funcionalidades do Admin
-    adm = true
-    containerBotao.innerHTML = ``;
+    var containerBotao = document.getElementById("planning-poker-lobby-sidebar-adminButton");
     containerBotao.innerHTML = `<button type="button" title="Contabilizar Votos" id="cardEncerrar" onclick="contabilizandoVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-arrow-square-out"></i></strong></button>
                                     <button type="button" title="Exibir votos" id="eyeIcon" onclick="exibirVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-eye-slash"></i></strong></button>
                                     <button type="button" title="Nova Votação" id="refrechIcon" onclick="zerarVotos()" class="btn-lobby-Encerrar"><strong><i class="ph ph-arrows-counter-clockwise"></i></strong></button>
                                 `;
-    var containerGay = document.querySelector(".boiolon");
-    containerGay.innerHTML = '';
-    containerGay.innerHTML += `
-     <button type="button" onclick="createStories()"
-     class="btn-lobby-addStories"><strong><i class="ph ph-plus"><br><h3>Add Stories</h3></i></strong></button>
-`;
+    var openPanelStories = document.querySelector(".open-panel-add-stories");
+    openPanelStories.innerHTML = `
+                <div class="divisor-stories"></div>
+                <div class="boiolon">
+                    <button type="button" onclick="createStories()" class="btn-lobby-addStories">
+                        <strong><i class="ph ph-plus"><br></i></strong>
+                    </button>
+                </div>
+            `;
 }
-
 
 socket.addEventListener('message', (event) => { //retorna a lista de usuarios do servidor
     userList = JSON.parse(event.data);
@@ -158,13 +173,15 @@ socket.addEventListener('message', (event) => { //retorna a lista de usuarios do
             validandoEntradaUsuario()
         } else {
             window.alert("id de sessão não encontrado")
-            window.location.reload();
+            //window.location.reload();
         }
-        validouEntrada=true;
+        validouEntrada = true;
     }
 
     if (createSection == true) {
-        adminConfigurations(userList);
+        adminConfigurations();
+    } else {
+        panelCreateStories.style.display = "none";
     }
 
     // Atualize a interface do usuário com a lista de usuários
@@ -272,7 +289,6 @@ function exibirVotos() { //admin tem a opção de exibir os votos ou nao
         exibirVoto = false;
     }
 
-
     usuariosAtualizados.forEach(usuario => {
         if (usuario.isAdmin) {
             // Supondo que 'socket' esteja definido em outro lugar
@@ -284,7 +300,6 @@ function exibirVotos() { //admin tem a opção de exibir os votos ou nao
 socket.addEventListener('close', (event) => { // Evento 'close' do WebSocket:
     console.log('Conexão fechada');
 });
-
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -309,37 +324,100 @@ function panelCreateRoom() {
     createRoomForm.style.display = "flex";
 }
 
+function handleCreateRoom() {
+    if (adminName.value == "" || roomName.value == "") return alert("preencha o campo");
+    adm = true;
 
-function createRoom() {
-    if (adminName.value != "" || roomName.value != "") {
-        //para o server
-        user.name = adminName.value;
-        user.id = currentDate.getMilliseconds();
-        user.sectionName = roomName.value;
-        user.isAdmin = true;
-        user.sectionId = generateIdRoom();
+    const { room } = createRoom();
+    createSection = true
 
-        function generateIdRoom() {
-            return 'room' + Math.random().toString(36).substr(2, 9);
-        }
-        console.log(user.sectionId);
+    const { user } = createUser();
+    idUsuario = idUsuario = user.id
 
-        idUsuario = user.id
-        nameUsuario = user.name
-        createSection = true
+    socket.send(JSON.stringify(user));
 
-        createRoomForm.style.display = "none";
-        bct.style.display = "none"
-        div_lobby.style.display = "flex"
-        socket.send(JSON.stringify(user));
-    }
-    else {
-        alert("preencha o campo")
-    }
+    createRoomForm.style.display = "none";
+    bct.style.display = "none"
+    div_lobby.style.display = "flex"
 }
+
+var idRoom = generateId("room");
+function createRoom() {
+    room = {
+        sectionName: roomName.value,
+        sectionId: idRoom,
+        CreatedAt: new Date(),
+        stories: [],
+    }
+    return { room }
+
+}
+
+function createUser(adm) {
+    const user = {
+        id: generateId("user"),
+        name: adminName.value,
+        isAdmin: false,
+        sectionId: idRoom,
+        sectionName: roomName.value,
+        votou: false,
+        idxuser: null,
+        refreshAdm: false,
+        exibir: false,
+    }
+    if (!adm) user.isAdmin = true
+    return { user }
+
+}
+
+function generateId(param) {
+    return param + Math.random().toString(36).substr(2, 9);
+}
+
 
 //////////////
-function createStories(){
-    var panelCreateStories = document.querySelector(".panel-add-stories");
-    
+function createStories() {
+    panelCreateStories.style.display = "flex";
 }
+
+function closePanelAddStories() {
+    panelCreateStories.style.display = "none";
+}
+
+function insertStories() {
+    ///agr se fode com o socket otario hahahahahahhahahahah
+    //content-views-stories
+    var viewStories = document.querySelector(".content-views-stories");
+    var inputStories = document.querySelector(".input-insert-stories").value; // Atribui o valor do input
+
+    let newStory = {
+        Title: inputStories,
+        storiesId: generateId("stories"),
+        sectionId: room.sectionId,
+        Voted: false,
+        Time: "",
+        CreatedAt: "",
+        AvgPoints: "",
+        TotalPoints: ""
+    };
+
+    room.stories.push(newStory);
+    escrevendoStories()
+
+    console.log(room);
+}
+var viewStories = document.querySelector(".content-views-stories");
+
+function removeStorie(idDoStory) {
+    room.stories = room.stories.filter(story => story.storiesId !== idDoStory);
+    console.log(room);
+    escrevendoStories()
+}
+
+function escrevendoStories(){
+    viewStories.innerHTML = ``;
+    room.stories.forEach(storie => {
+        viewStories.innerHTML += '<h2>' + storie.Title + `</h2><i class="ph ph-trash" onclick="removeStorie('${storie.storiesId}')"></i>`;
+    });
+}
+

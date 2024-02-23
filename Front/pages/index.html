@@ -34,7 +34,7 @@
             <input type="text" class="userName" placeholder="Nome de Usuario">
             <h3>Digite o Nome da Sala</h3>
             <input type="text" class="roomName" placeholder="Nome da Sala">
-            <button class="btnCloseCreate" onclick="createRoom()"><i class="ph ph-arrow-square-up"></i></button>
+            <button class="btnCloseCreate" onclick="handleCreateRoom()"><i class="ph ph-arrow-square-up"></i></button>
         </div>
     </div>
     <!--LOGIN-->
@@ -80,12 +80,9 @@
                     class="btn-lobby-13"><strong>13</strong></button>
                 <button type="button" idx="cafe" id="cardCafe" onclick="magianegra(this)"
                     class="btn-lobby-cafe"><strong><i class="ph ph-coffee"></i></strong></button>
-                <div class="boiolon">
-
-                </div>
-
-
+                
                 <!--FIM DOS BOTOES-->
+                
             </div>
             <div class="planning-poker-lobby-sidebar">
                 <img src="../images/header_logo.png" alt="">
@@ -99,21 +96,38 @@
                 <div id="planning-poker-lobby-sidebar-adminButton">
 
                 </div>
+
+                <!-- <div class="stories-user-information">
+                    <div>
+                        <div class="divisor-stories"></div>
+                        <div class="boiolon">
+                            <button type="button" onclick="createStories()" class="btn-lobby-addStories">
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="open-panel-add-stories" style="display: contents;">
+                </div>
                 <div class="invite-token">
                     <h2>token not found</h2><i onclick="copyId(this)" class="ph ph-copy"></i>
                 </div>
             </div>
-
         </div>
         <div class="panel-add-stories">
             <div class="insert-stories">
                 <h3>Add stories</h3>
-                <input type="text" placeholder="Nome"><br>
-                <button onclick="insertStories()">Send</button>
-                <button>Close</button>
+                <input type="text" placeholder="Nome" class="input-insert-stories">
+                <div class="btn-add-stories">
+                    <button onclick="insertStories()">Send</button>
+                    <button onclick="closePanelAddStories()">Close</button>
+                </div>
             </div>
+            <div class="divider"></div>
             <div class="view-stories">
-                <h2>Texte bb vapo</h2><i class="ph ph-trash"></i><br>
+                <div class="content-views-stories">
+
+                </div>
             </div>
         </div>
     </div>
@@ -140,10 +154,7 @@
             }, 500);
         }
 
-
-        function insertStories(){
-            ///agr se fode com o socket otario hahahahahahhahahahah
-        }
+        
     </script>
 </body>
 
